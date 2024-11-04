@@ -2,13 +2,16 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button, Alert } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import React, { useState, useEffect } from "react";
-import sampleData from "./assets/sample.json"; // Import the JSON data
+import sampleData from "./assets/sample.json";
+import Approve from "./Modal/Approve";
+import Deny from "./Modal/Deny";
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
   const [data, setData] = useState<string | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string>("");
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showDenyModal, setShowDenyModal] = useState(false);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -35,10 +38,24 @@ export default function App() {
     );
 
     if (isValidUser) {
-      setStatusMessage("Approved");
+      setShowApproveModal(true);
     } else {
-      setStatusMessage("Denied");
+      setShowDenyModal(true);
     }
+
+    // Automatically reset scanning after 3 seconds
+    setTimeout(() => {
+      setScanned(false);
+      setData(null);
+    }, 3000);
+  };
+
+  const closeApproveModal = () => {
+    setShowApproveModal(false);
+  };
+
+  const closeDenyModal = () => {
+    setShowDenyModal(false);
   };
 
   if (hasPermission === null) {
@@ -61,12 +78,13 @@ export default function App() {
         />
       </View>
       {data && <Text style={styles.resultText}>Scanned Data: {data}</Text>}
-      <Text style={styles.statusText}>Status: {statusMessage}</Text>
-      <Button
-        title={scanned ? "Tap to Scan Again" : "Start Scanning"}
-        onPress={() => setScanned(false)}
-      />
       <StatusBar style="auto" />
+      <Text style={styles.footer_text}>
+        Powered by <Text style={styles.text_span}>BLINK</Text> CREATIVE STUDIO
+      </Text>
+
+      <Approve visible={showApproveModal} onClose={closeApproveModal} />
+      <Deny visible={showDenyModal} onClose={closeDenyModal} />
     </View>
   );
 }
@@ -78,25 +96,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   text: {
-    color: "#61dbf7",
+    color: "#A30A24",
     fontSize: 20,
     marginBottom: 20,
   },
+
+  text_span: {
+    fontWeight: "bold",
+  },
+
+  footer_text: {
+    color: "#000000",
+    fontSize: 16,
+    position: "absolute",
+    bottom: 0,
+    marginBottom: 12,
+  },
+
   scannerContainer: {
     width: "90%",
     height: 300,
     overflow: "hidden",
     borderRadius: 10,
-    borderColor: "#61dbf7",
+    borderColor: "#A30A24",
     borderWidth: 2,
     marginBottom: 20,
   },
+
   resultText: {
     marginTop: 20,
     fontSize: 16,
     color: "green",
   },
+
   statusText: {
     marginTop: 10,
     fontSize: 18,
