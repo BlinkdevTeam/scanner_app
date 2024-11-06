@@ -28,7 +28,7 @@ const Approve: React.FC<ApproveProps> = ({
 }) => {
   const [countdown, setCountdown] = useState(3);
 
-  useEffect(() => {
+  useEffect(() => {8
     if (!visible) return;
 
     setCountdown(4);

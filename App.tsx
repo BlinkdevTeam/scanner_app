@@ -51,9 +51,11 @@ export default function App() {
         if (userKey) {
           const user = usersData[userKey];
 
-          // Update attendance status
           await update(ref(database, `users/${userKey}`), {
             attendanceCheck: "attended",
+            timeAttended: new Date().toLocaleString("en-US", {
+              timeZone: "Asia/Manila",
+            }),
           });
 
           setFirstName(user.firstName);
