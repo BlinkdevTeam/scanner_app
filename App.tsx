@@ -28,8 +28,6 @@ export default function App() {
     getBarCodeScannerPermissions();
   }, []);
 
-  const apiUrl = `https://script.google.com/macros/s/AKfycbw7KLmdKFIUYfBk4Vmo6l2z056JQmXmftxKmE7b9aI8yHp9_qV_u6ENGi8dFRNo1BkC/exec`;
-
   const handleBarCodeScanned = async ({
     type,
     data,
@@ -39,27 +37,39 @@ export default function App() {
   }) => {
     setScanned(true);
     setData(data);
+    const usersRef = ref(database, "users");
 
     try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data }),
-      });
+      const snapshot = await get(usersRef);
 
-      const result = await response.json();
+      if (snapshot.exists()) {
+        const usersData = snapshot.val();
+        const userKey = Object.keys(usersData).find(
+          (key) => usersData[key].email === data
+        );
 
-      if (result.status === "success" && result.user) {
-        // Email is valid; update state with user info
-        setFirstName(result.user.firstName);
-        setLastName(result.user.lastName);
-        setShowApproveModal(true);
+        if (userKey) {
+          const user = usersData[userKey];
+
+          await update(ref(database, `users/${userKey}`), {
+            attendanceCheck: "attended",
+            timeAttended: new Date().toLocaleString("en-US", {
+              timeZone: "Asia/Manila",
+            }),
+          });
+
+          setFirstName(user.firstName);
+          setLastName(user.lastName);
+          setShowApproveModal(true);
+        } else {
+          setShowDenyModal(true);
+        }
       } else {
-        // Email not found; show deny modal
+        console.log("No data available");
         setShowDenyModal(true);
       }
     } catch (error) {
-      console.error("Error accessing Google Sheets API:", error);
+      console.error("Error reading from Firebase:", error);
       setShowDenyModal(true);
     }
 
@@ -97,7 +107,7 @@ export default function App() {
           style={StyleSheet.absoluteFillObject}
         />
       </View>
-      <Text style={styles.text}>Place the code inside the frames</Text>
+      <Text style={styles.text}>Place the code inside the frame</Text>
       {/* {data && <Text style={styles.resultText}>Scanned Data: {data}</Text>} */}
       <StatusBar style="auto" />
       <View style={styles.qrIconContainer}>

@@ -28,7 +28,8 @@ const Approve: React.FC<ApproveProps> = ({
 }) => {
   const [countdown, setCountdown] = useState(3);
 
-  useEffect(() => {8
+  useEffect(() => {
+    8;
     if (!visible) return;
 
     setCountdown(4);
@@ -54,8 +55,7 @@ const Approve: React.FC<ApproveProps> = ({
       animationType="slide"
       transparent={true}
       visible={visible}
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <View style={styles.logoContainer}>
@@ -85,8 +85,7 @@ const Approve: React.FC<ApproveProps> = ({
                 y1="156.99"
                 x2="35.5785"
                 y2="35.1855"
-                gradientUnits="userSpaceOnUse"
-              >
+                gradientUnits="userSpaceOnUse">
                 <Stop stopColor="#33D679" />
                 <Stop offset="1" stopColor="#AADB53" />
               </LinearGradient>
@@ -96,8 +95,7 @@ const Approve: React.FC<ApproveProps> = ({
                 y1="59.7869"
                 x2="112.397"
                 y2="128.959"
-                gradientUnits="userSpaceOnUse"
-              >
+                gradientUnits="userSpaceOnUse">
                 <Stop stopColor="#33D679" />
                 <Stop offset="1" stopColor="#1DAD59" />
               </LinearGradient>

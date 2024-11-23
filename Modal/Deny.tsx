@@ -46,8 +46,7 @@ const Deny: React.FC<ApproveProps> = ({ visible, onClose, data }) => {
       animationType="slide"
       transparent={true}
       visible={visible}
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <View style={styles.logoContainer}>
@@ -77,8 +76,7 @@ const Deny: React.FC<ApproveProps> = ({ visible, onClose, data }) => {
                 y1="160.324"
                 x2="33.0221"
                 y2="38.6312"
-                gradientUnits="userSpaceOnUse"
-              >
+                gradientUnits="userSpaceOnUse">
                 <Stop stopColor="#D63333" />
                 <Stop offset="1" stopColor="#F7875B" />
               </LinearGradient>
@@ -88,8 +86,7 @@ const Deny: React.FC<ApproveProps> = ({ visible, onClose, data }) => {
                 y1="145.623"
                 x2="94.4837"
                 y2="65.104"
-                gradientUnits="userSpaceOnUse"
-              >
+                gradientUnits="userSpaceOnUse">
                 <Stop stopColor="#AD2929" />
                 <Stop offset="1" stopColor="#D63333" />
               </LinearGradient>
