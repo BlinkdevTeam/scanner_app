@@ -28,15 +28,12 @@ export default function App() {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = async ({
-    type,
-    data,
-  }: {
+  const handleBarCodeScanned = async (event: {
     type: string;
     data: string;
   }) => {
     setScanned(true);
-    setData(data);
+    setData(event.data);
     const usersRef = ref(database, "users");
 
     try {
@@ -45,7 +42,7 @@ export default function App() {
       if (snapshot.exists()) {
         const usersData = snapshot.val();
         const userKey = Object.keys(usersData).find(
-          (key) => usersData[key].email === data
+          (key) => usersData[key].email === event.data
         );
 
         if (userKey) {
@@ -108,7 +105,12 @@ export default function App() {
         />
       </View>
       <Text style={styles.text}>Place the code inside the frame</Text>
-      {/* {data && <Text style={styles.resultText}>Scanned Data: {data}</Text>} */}
+
+      {/* Conditional loader rendering */}
+      {scanned && (
+        <div className="loader"></div> // Add your loader here, this requires you to have a CSS class defined as you provided
+      )}
+
       <StatusBar style="auto" />
       <View style={styles.qrIconContainer}>
         <Svg width="23" height="30" viewBox="0 0 63 85" fill="none">
