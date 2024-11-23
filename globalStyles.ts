@@ -114,4 +114,17 @@ export const globalStyles = StyleSheet.create({
     bottom: 0,
     marginBottom: 50,
   },
+  loader: {
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    borderWidth: 8,
+    borderColor: "#A30A24",
+    borderTopColor: "#ffffff",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -40,
+    marginLeft: -40,
+  },
 });
