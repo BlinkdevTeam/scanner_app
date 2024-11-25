@@ -107,12 +107,13 @@ const Approve: React.FC<ApproveProps> = ({
             You can proceed with the following data:
           </Text>
           <View style={styles.modalDataContainer}>
-            {firstName && lastName && (
-              <Text style={styles.modalDataText}>
-                Name: {firstName} {lastName}
-              </Text>
-            )}
-            {data && <Text style={styles.modalDataText}>Email: {data} </Text>}
+            <Text style={styles.modalDataText}>
+              {firstName && lastName
+                ? `${firstName} ${lastName}`
+                : `${firstName}`}
+            </Text>
+
+            {/* {data && <Text style={styles.modalDataText}>{data} </Text>} */}
           </View>
           <Pressable style={styles.button} onPress={onClose}>
             <Text style={styles.buttonText}>

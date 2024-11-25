@@ -108,7 +108,7 @@ export default function App() {
 
       {/* Conditional loader rendering */}
       {scanned && (
-        <View style={styles.loader}></View> // Add your loader here, this requires you to have a CSS class defined as you provided
+        <View style={styles.loader}></View> 
       )}
 
       <StatusBar style="auto" />
