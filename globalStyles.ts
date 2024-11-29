@@ -127,4 +127,12 @@ export const globalStyles = StyleSheet.create({
     marginTop: -40,
     marginLeft: -40,
   },
+  dropdownContainer: {
+    width: '80%',  // You can adjust the width as needed
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
 });

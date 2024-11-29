@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-picker/picker": "^2.10.1",
     "expo": "~51.0.39",
     "expo-barcode-scanner": "^13.0.1",
     "expo-camera": "^15.0.16",

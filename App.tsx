@@ -2,8 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import React, { useState, useEffect } from "react";
-import sampleData from "./assets/sample.json";
-import registeredParticipant from "./assets/registeredParticipant.json";
+import { Picker } from "@react-native-picker/picker"; // Import Picker from the correct package
 import Approve from "./Modal/Approve";
 import Deny from "./Modal/Deny";
 import { globalStyles as styles } from "./globalStyles";
@@ -18,11 +17,17 @@ export default function App() {
   const [lastName, setLastName] = useState<string | null>(null);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showDenyModal, setShowDenyModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<string>("day1"); // New state for day selection
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
+      try {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === "granted");
+      } catch (error) {
+        console.error("Error requesting camera permission:", error);
+        setHasPermission(false);
+      }
     };
 
     getBarCodeScannerPermissions();
@@ -48,11 +53,12 @@ export default function App() {
         if (userKey) {
           const user = usersData[userKey];
 
+          // Update the selected day's attendance in Firebase
           await update(ref(database, `users/${userKey}`), {
-            attendanceCheck: "attended",
-            timeAttended: new Date().toLocaleString("en-US", {
+            [`${selectedDay}`]: "attended", // Mark the selected day as attended
+            [`${selectedDay}timeAttended`]: new Date().toLocaleString("en-US", {
               timeZone: "Asia/Manila",
-            }),
+            }), // Update the time for the selected day
           });
 
           setFirstName(user.firstName);
@@ -70,6 +76,7 @@ export default function App() {
       setShowDenyModal(true);
     }
 
+    // Reset state after timeout
     setTimeout(() => {
       setScanned(false);
       setData(null);
@@ -89,6 +96,7 @@ export default function App() {
   if (hasPermission === null) {
     return <Text>Requesting for camera permission...</Text>;
   }
+
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
@@ -98,18 +106,25 @@ export default function App() {
       <View style={styles.scannerContainer}>
         <CameraView
           onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-          barcodeScannerSettings={{
-            barcodeTypes: ["qr", "pdf417"],
-          }}
           style={StyleSheet.absoluteFillObject}
         />
       </View>
       <Text style={styles.text}>Place the code inside the frame</Text>
 
+      {/* Dropdown for selecting day */}
+      <View style={styles.dropdownContainer}>
+        <Picker
+          selectedValue={selectedDay}
+          onValueChange={(itemValue) => setSelectedDay(itemValue)}>
+          <Picker.Item label="December 2, 2024" value="day1" />
+          <Picker.Item label="December 3, 2024" value="day2" />
+          <Picker.Item label="December 4, 2024" value="day3" />
+          <Picker.Item label="December 5, 2024" value="day4" />
+        </Picker>
+      </View>
+
       {/* Conditional loader rendering */}
-      {scanned && (
-        <View style={styles.loader}></View> 
-      )}
+      {scanned && <View style={styles.loader}></View>}
 
       <StatusBar style="auto" />
       <View style={styles.qrIconContainer}>
